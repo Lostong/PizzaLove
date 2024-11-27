@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="text-center mb-4">Панель Адміністратора</h2>
+    <div class="d-flex justify-content-around">
+        <a href="{{ url_for('add_item') }}" class="btn btn-success">Додати піцу</a>
+        <a href="{{ url_for('delete_item') }}" class="btn btn-danger">Видалити піцу</a>
+    </div>
+</div>
+{% endblock %}

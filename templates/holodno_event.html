@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pizza Love</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        body {
+            background-color: #121212;
+            color: #e0e0e0;
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            text-align: center;
+        }
+
+        .navbar {
+            background-color: #1f1f1f;
+            border-bottom: 1px solid #333;
+        }
+
+        .navbar .nav-link {
+            color: #e0e0e0;
+        }
+
+        .navbar .nav-link:hover {
+            color: #ff6347;
+        }
+
+        .header {
+            background-color: #272727;
+            text-align: center;
+            padding: 4rem 0;
+            color: #ff7e5f;
+        }
+
+        #cart-button {
+            background-color: #ff7e5f;
+            color: #121212;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 1.2rem;
+            transition: background-color 0.3s ease;
+        }
+
+        #cart-button:hover {
+            background-color: #ff6347;
+            color: white;
+        }
+
+        .alert {
+            background-color: #1f1f1f;
+            color: #e0e0e0;
+            text-align: center;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 50px;
+            border: 1px solid #333;
+        }
+
+        .alert h1 {
+            margin-bottom: 20px;
+            font-size: 2rem;
+            text-transform: uppercase;
+        }
+
+        .alert p {
+            font-size: 1.5rem;
+            margin: 20px 0;
+        }
+
+        .alert .btn {
+            font-size: 1.5rem;
+            padding: 15px 30px;
+            margin: 10px;
+            width: 250px;
+        }
+
+        footer {
+            background-color: #1f1f1f;
+            color: #e0e0e0;
+            padding: 1rem 0;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <h1 class="display-4 font-weight-bold">Pizza Love</h1>
+        <p class="lead tagline">Найкраща піцца Житомира</p>
+    </header>
+
+    <main>
+        <div class="alert">
+            <h1>ЗАРАЗ ХОЛОДНО!</h1>
+            <p>Може варто подумати про доставку? 😟</p>
+            <a href="{{ url_for('dostavka') }}" class="btn btn-danger">Добре, давай доставку</a>
+            <a href="{{ url_for('get_menu') }}" class="btn btn-secondary">Ні, дякую</a>
+        </div>
+    </main>
+
+    <footer>
+        <p>corporet in Nazarka 2024</p>
+    </footer>
+
+</body>
+</html>

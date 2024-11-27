@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="text-center mb-4">Меню</h2>
+
+    <div class="row">
+        {% for pizza in pizzas %}
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">{{ pizza.name }}</h5>
+                    <p class="card-text">{{ pizza.description }}</p>
+                    <p class="card-text"><strong>Ціна:</strong> {{ pizza.price }} грн</p>
+                    <a href="{{ url_for('add_to_cart', name=pizza.name, price=pizza.price) }}" class="btn btn-primary">Купити зараз</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+
+{% if temperature is not none and temperature < 10 %}
+<div id="cold-alert" class="alert alert-info text-center" style="position: fixed; top: 20%; left: 50%; transform: translate(-50%, -50%); background-color: #333; color: #fff; padding: 20px; border-radius: 10px; z-index: 1000;">
+    <p>Зараз холодно, {{ temperature }}°C. Може доставку?</p>
+    <button id="delivery-btn" class="btn btn-success">Замовити доставку</button>
+</div>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const alertBox = document.getElementById("cold-alert");
+    const closeButton = document.getElementById("delivery-btn");
+    closeButton.addEventListener("click", function () {
+        alertBox.style.display = "none";
+    });
+});
+</script>
+{% endif %}
+
+
+
+
+
+{% block navbar %}
+<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+    <a class="navbar-brand" href="#">Pizza Love</a>
+    <div class="ml-auto">
+        <a href="{{ url_for('cart') }}" class="btn btn-outline-secondary">
+            Кошик ({{ cart_count }})
+        </a>
+    </div>
+</nav>
+{% endblock %}

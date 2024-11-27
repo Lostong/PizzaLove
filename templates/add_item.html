@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="text-center mb-4">Додати нову піцу</h2>
+
+    <form action="{{ url_for('add_item') }}" method="POST">
+        <div class="form-group">
+            <label for="name">Назва піци:</label>
+            <input type="text" class="form-control" id="name" name="name" required>
+        </div>
+
+        <div class="form-group">
+            <label for="description">Опис піци:</label>
+            <textarea class="form-control" id="description" name="description" required></textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="price">Ціна:</label>
+            <input type="number" class="form-control" id="price" name="price" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Додати піцу</button>
+    </form>
+</div>
+{% endblock %}

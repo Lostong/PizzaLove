@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="text-center mb-4">Меню</h2>
+
+    <div class="row">
+        {% for pizza in pizzas %}
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">{{ pizza.name }}</h5>
+                    <p class="card-text">{{ pizza.description }}</p>
+                    <p class="card-text"><strong>Ціна:</strong> {{ pizza.price }} грн</p>
+                    <button class="btn btn-primary" onclick="addToCart('{{ pizza.name }}', {{ pizza.price }})">Купити зараз</button>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<script>
+let cart = [];
+
+function addToCart(name, price) {
+    cart.push({ name, price });
+    alert(name + " додано до кошика!");
+    updateCartButton();
+}
+
+function updateCartButton() {
+    const cartButton = document.getElementById("cart-button");
+    if (cartButton) {
+        cartButton.innerText = `Кошик (${cart.length})`;
+    }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    updateCartButton();
+});
+</script>
+{% endblock %}

@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="text-center mb-4">Видалити піцу</h2>
+    <form action="{{ url_for('delete_item') }}" method="POST">
+        <div class="form-group">
+            <label for="item_id">Виберіть піцу для видалення:</label>
+            <select class="form-control" id="item_id" name="item_id" required>
+                {% for pizza in pizzas %}
+                    <option value="{{ pizza.id }}">{{ pizza.name }} - {{ pizza.price }} грн</option>
+                {% endfor %}
+            </select>
+        </div>
+        <button type="submit" class="btn btn-danger mt-3">Видалити</button>
+    </form>
+</div>
+{% endblock %}
