@@ -135,6 +135,37 @@ def add_item():
 def admin_panel():
     return render_template("admin_panel.html")
 
+
+@app.route("/admin/edit/<int:item_id>", methods=["GET", "POST"])
+def edit_item(item_id):
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
+
+    if request.method == "POST":
+        name = request.form['name']
+        description = request.form['description']
+        price = float(request.form['price'])
+
+        cursor.execute('''
+            UPDATE menu_items 
+            SET name = ?, description = ?, price = ?
+            WHERE id = ?
+        ''', (name, description, price, item_id))
+        conn.commit()
+        conn.close()
+
+        return redirect(url_for('get_menu'))
+
+
+    cursor.execute("SELECT name, description, price FROM menu_items WHERE id = ?", (item_id,))
+    item = cursor.fetchone()
+    conn.close()
+
+    if item:
+        return render_template("edit_item.html", item_id=item_id, name=item[0], description=item[1], price=item[2])
+    return "Item not found", 404
+
+
 @app.route("/admin/delete", methods=["GET", "POST"])
 def delete_item():
     if request.method == "POST":

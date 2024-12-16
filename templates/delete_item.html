@@ -2,17 +2,37 @@
 
 {% block content %}
 <div class="container mt-4">
-    <h2 class="text-center mb-4">Видалити піцу</h2>
-    <form action="{{ url_for('delete_item') }}" method="POST">
-        <div class="form-group">
-            <label for="item_id">Виберіть піцу для видалення:</label>
-            <select class="form-control" id="item_id" name="item_id" required>
-                {% for pizza in pizzas %}
-                    <option value="{{ pizza.id }}">{{ pizza.name }} - {{ pizza.price }} грн</option>
-                {% endfor %}
-            </select>
-        </div>
-        <button type="submit" class="btn btn-danger mt-3">Видалити</button>
-    </form>
+    <h2 class="text-center mb-4">Видалення та редагування піц</h2>
+    <table class="table table-bordered">
+        <thead class="thead-light">
+            <tr>
+                <th>Назва</th>
+                <th>Опис</th>
+                <th>Ціна</th>
+                <th>Дії</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for pizza in pizzas %}
+            <tr>
+                <td>{{ pizza.name }}</td>
+                <td>{{ pizza.description }}</td>
+                <td>{{ pizza.price }} грн</td>
+                <td>
+
+                    <form method="POST" action="{{ url_for('delete_item') }}" style="display: inline;">
+                        <input type="hidden" name="item_id" value="{{ pizza.id }}">
+                        <button type="submit" class="btn btn-danger btn-sm">Видалити</button>
+                    </form>
+
+                    <a href="{{ url_for('edit_item', item_id=pizza.id) }}" class="btn btn-warning btn-sm">Редагувати</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div class="text-center mt-4">
+        <a href="{{ url_for('admin_panel') }}" class="btn btn-secondary">Повернутися до панелі адміністратора</a>
+    </div>
 </div>
 {% endblock %}

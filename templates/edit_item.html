@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="text-center mb-4">Редагувати піцу</h2>
+    <form method="POST" action="{{ url_for('edit_item', item_id=item_id) }}">
+        <div class="form-group">
+            <label for="name">Назва:</label>
+            <input type="text" class="form-control" id="name" name="name" value="{{ name }}" required>
+        </div>
+        <div class="form-group">
+            <label for="description">Опис:</label>
+            <textarea class="form-control" id="description" name="description" rows="3" required>{{ description }}</textarea>
+        </div>
+        <div class="form-group">
+            <label for="price">Ціна:</label>
+            <input type="number" class="form-control" id="price" name="price" value="{{ price }}" step="0.01" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Зберегти зміни</button>
+        <a href="{{ url_for('admin_panel') }}" class="btn btn-secondary">Скасувати</a>
+    </form>
+</div>
+{% endblock %}
