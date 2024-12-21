@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="text-center">Опитування</h1>
+    <p class="text-muted text-center">Виберіть вашу улюблену піццу:</p>
+    <form action="{{ url_for('poll') }}" method="post" class="text-center">
+        {% for pizza in pizzas %}
+        <div class="form-check">
+            <input class="form-check-input" type="radio" name="pizza_choice" id="pizza_{{ pizza.id }}" value="{{ pizza.id }}">
+            <label class="form-check-label" for="pizza_{{ pizza.id }}">
+                {{ pizza.name }} ({{ pizza.price }} грн)
+            </label>
+        </div>
+        {% endfor %}
+        <button type="submit" class="btn btn-success mt-3">Відправити</button>
+    </form>
+</div>
+{% endblock %}

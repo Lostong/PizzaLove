@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Статистика голосування за піци</h2>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">Назва піци</th>
+                <th scope="col">Опис</th>
+                <th scope="col">Кількість голосів</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for pizza in pizzas %}
+                <tr>
+                    <td>{{ pizza[0] }}</td>
+                    <td>{{ pizza[1] }}</td>
+                    <td>{{ pizza[2] }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

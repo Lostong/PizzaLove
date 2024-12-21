@@ -7,6 +7,7 @@ app = Flask(__name__)
 app.secret_key = 'Nazarka'
 
 db_path = os.path.abspath('instance/menu.db')
+poll_db_path = os.path.abspath('instance/poll.db')
 
 
 def get_menu_items():
@@ -34,6 +35,7 @@ def delete_menu_item(item_id):
     conn.commit()
     conn.close()
 
+
 def get_temperature():
     API_KEY = "975ccb71edb9ade5e2a8415c67eb9107"
     CITY = "Zhytomyr"
@@ -56,6 +58,7 @@ def get_temperature():
         print("Помилка отримання погоди:", data)
         return None
 
+
 @app.route("/dostavka")
 def dostavka():
     return render_template("dostavka.html")
@@ -72,12 +75,9 @@ def get_menu():
     cart_count = len(session.get('cart', []))
     temperature = get_temperature()
 
-
     if 'holodno_visits' in session and session['holodno_visits'] >= 1:
-
         print("Кількість відвідувань holodno_event більше або дорівнює 1. Не редіректимо.")
     elif temperature is not None and temperature <= 5:
-
         return redirect(url_for('holodno_event'))
 
     if isinstance(temperature, (int, float)):
@@ -90,21 +90,39 @@ def get_menu():
     return render_template("menu.html", pizzas=pizzas, cart_count=cart_count, temperature=temperature)
 
 
-
 @app.route("/holodno_event/")
 def holodno_event():
-
     if 'holodno_visits' not in session:
         session['holodno_visits'] = 0
 
-
     session['holodno_visits'] += 1
-
 
     visits = session['holodno_visits']
     print(f"Кількість відвідувань сторінки holodno_event: {visits}")
 
     return render_template("holodno_event.html", visits=visits)
+
+
+@app.route('/poll', methods=['GET', 'POST'])
+def poll():
+    if request.method == 'POST':
+        pizza_choice = request.form.get('pizza_choice')
+        if pizza_choice:
+            conn = sqlite3.connect(poll_db_path)
+            cursor = conn.cursor()
+            cursor.execute('''
+                INSERT INTO poll_responses (pizza_id) VALUES (?)
+            ''', (pizza_choice,))
+            conn.commit()
+            conn.close()
+            return redirect(url_for('thank_you'))
+    pizzas = get_menu_items()
+    return render_template('poll.html', pizzas=pizzas)
+
+
+@app.route('/thank_you')
+def thank_you():
+    return render_template('thank_you.html')
 
 
 @app.route("/cart/")
@@ -121,6 +139,7 @@ def add_to_cart(name, price):
     session.modified = True
     return redirect(url_for('get_menu'))
 
+
 @app.route("/admin/add", methods=["GET", "POST"])
 def add_item():
     if request.method == "POST":
@@ -134,7 +153,6 @@ def add_item():
 @app.route("/admin/")
 def admin_panel():
     return render_template("admin_panel.html")
-
 
 @app.route("/admin/edit/<int:item_id>", methods=["GET", "POST"])
 def edit_item(item_id):
@@ -156,7 +174,6 @@ def edit_item(item_id):
 
         return redirect(url_for('get_menu'))
 
-
     cursor.execute("SELECT name, description, price FROM menu_items WHERE id = ?", (item_id,))
     item = cursor.fetchone()
     conn.close()
@@ -165,6 +182,9 @@ def edit_item(item_id):
         return render_template("edit_item.html", item_id=item_id, name=item[0], description=item[1], price=item[2])
     return "Item not found", 404
 
+@app.route("/result", methods=["GET", "POST"])
+def result():
+    return render_template("result.html")
 
 @app.route("/admin/delete", methods=["GET", "POST"])
 def delete_item():
@@ -176,4 +196,16 @@ def delete_item():
     return render_template("delete_item.html", pizzas=pizzas)
 
 if __name__ == "__main__":
+
+    if not os.path.exists(poll_db_path):
+        conn = sqlite3.connect(poll_db_path)
+        cursor = conn.cursor()
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS poll_responses (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                pizza_id INTEGER NOT NULL
+            )
+        ''')
+        conn.commit()
+        conn.close()
     app.run(port=5050, debug=True)
